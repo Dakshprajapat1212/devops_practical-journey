@@ -1,0 +1,18 @@
+/
+Root of everything
+/home
+User directories (like /home/ubuntu)
+/etc
+Config files
+/var
+Logs, caches, etc
+/usr
+System apps & libraries
+/bin
+Basic binary commands (like ls, cat)
+/tmp
+Temporary files
+/opt
+Optional software installs
+/root
+Superuser’s home directory
