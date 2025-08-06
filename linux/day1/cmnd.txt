@@ -1,2 +1,7 @@
 
 hi welcome
+
+
+1.ls -ltr , print alll information about files with owner ad uusermma'e
+
+2. 
