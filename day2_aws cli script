@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Optional: Set your AWS region here
+REGION="us-west-2"
+
+echo "======================================"
+echo "📦 S3 Buckets:"
+echo "======================================"
+aws s3 ls
+echo
+
+echo "======================================"
+echo "🖥️  EC2 Instances (Region: $REGION):"
+echo "======================================"
+aws ec2 describe-instances \
+  --region $REGION \
+  --query 'Reservations[*].Instances[*].{
+      InstanceID: InstanceId,
+      Name: (Tags[?Key==`Name`]|[0].Value) || `N/A`,
+      State: State.Name,
+      PublicIP: PublicIpAddress
+    }' \
+  --output table
+echo
+
+echo "======================================"
+echo "👤 IAM Users:"
+echo "======================================"
+aws iam list-users \
+  --query 'Users[*].[UserName, CreateDate]' \
+  --output table
+echo
+
+echo "======================================"
+echo "🧠 Lambda Functions:"
+echo "======================================"
+aws lambda list-functions \
+  --region $REGION \
+  --query 'Functions[*].[FunctionName, Runtime, LastModified]' \
+  --output table
