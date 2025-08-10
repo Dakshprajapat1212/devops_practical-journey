@@ -1,0 +1,77 @@
+Got it, Hannu — let’s break this top output into plain, no-confusion parts so you know exactly what each number means.
+
+⸻
+
+1. First line — System uptime & load
+
+top - 15:13:30 up 48 min,  5 users,  load average: 0.00, 0.00, 0.00
+
+	•	15:13:30 → Current system time.
+	•	up 48 min → System has been running for 48 minutes since last boot.
+	•	5 users → Number of users currently logged in (includes SSH sessions, terminals, etc.).
+	•	load average: 0.00, 0.00, 0.00 → CPU load over:
+	•	Last 1 minute → 0.00
+	•	Last 5 minutes → 0.00
+	•	Last 15 minutes → 0.00
+(0.00 means CPU was completely idle. A load of 1.00 means 100% busy on a single-core CPU.)
+
+⸻
+
+2. Second line — Task summary
+
+Tasks: 118 total,   1 running, 117 sleeping,   0 stopped,   0 zombie
+
+	•	118 total → Total number of processes.
+	•	1 running → Processes actively using CPU.
+	•	117 sleeping → Processes waiting/idling until needed.
+	•	0 stopped → Processes paused/stopped (e.g., via SIGSTOP).
+	•	0 zombie → Processes that finished but haven’t been fully cleaned up (good: none here).
+
+⸻
+
+3. Third line — CPU usage
+
+%Cpu(s):  0.0 us,  0.3 sy,  0.0 ni, 99.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+
+Breakdown of CPU time in the last refresh cycle:
+	•	us = 0.0 → % in user space (normal programs).
+	•	sy = 0.3 → % in system/kernel space.
+	•	ni = 0.0 → % in user space with nice priority (background low-priority jobs).
+	•	id = 99.7 → % idle time (CPU not doing anything).
+	•	wa = 0.0 → % waiting for I/O (e.g., slow disk/network).
+	•	hi = 0.0 → % servicing hardware interrupts.
+	•	si = 0.0 → % servicing software interrupts.
+	•	st = 0.0 → % stolen by hypervisor (VM host using CPU time).
+
+⸻
+
+4. Fourth line — Memory usage
+
+MiB Mem :    957.4 total,    326.4 free,    357.4 used,    430.3 buff/cache
+
+	•	957.4 total → Total system RAM.
+	•	326.4 free → Completely unused memory.
+	•	357.4 used → Memory in active use by programs.
+	•	430.3 buff/cache → Memory used for disk cache/buffers (can be freed if apps need it).
+
+⸻
+
+5. Fifth line — Swap usage
+
+MiB Swap:      0.0 total,      0.0 free,      0.0 used.    599.9 avail Mem
+
+	•	0.0 total → No swap space configured.
+	•	0.0 used → Swap not being used.
+	•	599.9 avail Mem → Amount of RAM available for starting new applications without swapping.
+
+⸻
+
+💡 Key takeaway for your numbers:
+	•	Your CPU is almost fully idle (99.7% idle).
+	•	Memory usage is light — more than 300 MiB truly free and ~430 MiB in cache.
+	•	No swap is set up, but plenty of RAM is available.
+	•	System load is basically zero — machine is very free.
+
+⸻
+
+If you want, I can also make a color-coded diagram of top output so you can instantly know what each section means when you see it in real-time. That would make it stick forever.
