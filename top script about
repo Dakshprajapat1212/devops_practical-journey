@@ -74,4 +74,50 @@ MiB Swap:      0.0 total,      0.0 free,      0.0 used.    599.9 avail Mem
 
 ⸻
 
+That line in top is the column header — it tells you what each column below means.
+Let’s break it down:
+
+Column	Meaning
+PID	Process ID — unique number given to each running process.
+USER	Username of the process owner.
+PR	Priority — how important the process is to the scheduler (lower number = higher priority).
+NI	Nice value — a user-adjustable priority hint (-20 = highest priority, 19 = lowest).
+VIRT	Virtual memory used by the process (includes all code, data, and shared libraries, whether in RAM or swap).
+RES	Resident memory — the part of VIRT actually in physical RAM.
+SHR	Shared memory — amount of RES that can be shared with other processes (e.g., shared libraries).
+S	State of the process:
+
+	•	R = running
+	•	S = sleeping (idle but waiting for something)
+	•	I = idle kernel thread
+	•	D = uninterruptible sleep
+	•	Z = zombie (dead but not cleaned up) |
+| %CPU | Percentage of CPU time the process is using right now. |
+| %MEM | Percentage of physical RAM the process is using. |
+| TIME+ | Total CPU time the process has used since it started (minutes:seconds.tenths). |
+| COMMAND | Name (or command) that started the process. |
+
+⸻
+
+💡 In your example:
+
+1557 ubuntu  20  0  12328  5588  3540 S  0.0  0.6  0:01.28 top
+
+	•	PID: 1557 → process ID of top
+	•	USER: ubuntu → you’re the owner
+	•	PR: 20 → normal priority
+	•	NI: 0 → nice value not changed
+	•	VIRT: 12328 KB → virtual memory size
+	•	RES: 5588 KB → RAM in use
+	•	SHR: 3540 KB → shared memory
+	•	S: S → sleeping (refreshing every 3 seconds)
+	•	%CPU: 0.0 → not currently using CPU
+	•	%MEM: 0.6 → using 0.6% of RAM
+	•	TIME+: 0:01.28 → total CPU time used
+	•	COMMAND: top → program name
+
+⸻
+
+If you want, I can also give you a visual map of how VIRT, RES, and SHR relate in memory — that’s the part most beginners find tricky.
+
 If you want, I can also make a color-coded diagram of top output so you can instantly know what each section means when you see it in real-time. That would make it stick forever.
