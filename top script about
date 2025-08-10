@@ -98,6 +98,142 @@ S	State of the process:
 | COMMAND | Name (or command) that started the process. |
 
 ⸻
+Hannu, analyzing the output of that script is exactly the kind of DevOps skill you need —
+it’s not about memorizing commands, but about reading the results and knowing what they mean for system health.
+
+Let’s break it down step-by-step.
+
+⸻
+
+1. CPU Usage Section
+
+>> CPU Usage:
+Used: 15.2%
+
+	•	What to check:
+	•	If CPU usage is consistently above 80%, the server may be overloaded.
+	•	Identify why → check “Top 5 Processes by CPU” below.
+	•	Possible actions:
+	•	Kill/restart runaway processes.
+	•	Scale resources (more CPU cores in cloud).
+
+⸻
+
+2. Memory Usage Section
+
+>> Memory Usage:
+Used: 3000MB / 8000MB (37.50%)
+
+	•	What to check:
+	•	If usage > 85%, memory pressure could cause swapping (slow performance).
+	•	Possible actions:
+	•	Restart memory-hogging processes.
+	•	Add RAM if persistent.
+
+⸻
+
+3. Disk Usage Section
+
+>> Disk Usage:
+Used: 45G / 100G (45%)
+
+	•	What to check:
+	•	If usage > 90%, the server may crash when writing logs/files.
+	•	Check which directory is using space → du -sh /* | sort -h.
+	•	Possible actions:
+	•	Clear old logs, temp files, or expand disk.
+
+⸻
+
+4. Top 5 Processes by CPU
+
+PID   COMMAND    %CPU
+1234  java       50.0
+2345  nginx      10.2
+...
+
+	•	What to check:
+	•	High CPU here explains high total CPU usage above.
+	•	Possible actions:
+	•	Restart or optimize the heavy process.
+
+⸻
+
+5. Top 5 Processes by Memory
+
+PID   COMMAND    %MEM
+5678  mysqld     35.5
+6789  node       20.1
+...
+
+	•	What to check:
+	•	If one process dominates RAM, it might have a memory leak.
+	•	Possible actions:
+	•	Restart, optimize queries, or allocate more memory.
+
+⸻
+
+6. OS Version
+
+Ubuntu 22.04.3 LTS
+
+	•	Why it matters:
+	•	Helps when applying patches or debugging OS-specific issues.
+
+⸻
+
+7. Uptime
+
+up 5 days, 3 hours
+
+	•	Why it matters:
+	•	If uptime is short → server restarted recently → check for crash logs.
+
+⸻
+
+8. Load Average
+
+ 0.12, 0.25, 0.30
+
+	•	Meaning:
+	•	Three numbers = load over last 1, 5, 15 minutes.
+	•	If any number > CPU cores, the server is overloaded.
+
+⸻
+
+9. Logged In Users
+
+3
+
+	•	Why it matters:
+	•	Unexpected users → possible unauthorized access.
+
+⸻
+
+10. Failed Login Attempts
+
+12
+
+	•	Why it matters:
+	•	High number may mean brute-force attack.
+	•	Check /var/log/auth.log for source IPs.
+
+⸻
+
+How to Study & Report This
+
+When you run this script, don’t just read numbers —
+ask yourself:
+	1.	Is it healthy or critical? (threshold check)
+	2.	If critical, what is the likely cause?
+	3.	What immediate action is needed?
+	4.	What long-term fix could prevent it?
+
+⸻
+
+If you want, I can turn this into a DevOps “System Health Report Template” so that whenever you run scripts like this, you know exactly what to write in a health check report — just like real DevOps engineers in MNCs.
+
+Do you want me to prepare that?
 
 💡 In your example:
 
