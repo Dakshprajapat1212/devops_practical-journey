@@ -1,0 +1,138 @@
+Great question! Let's break down the flags used in those Linux commands so you understand **why** they're used and **what** they do.
+
+---
+
+### 🧠 1. `top -bn1 | grep "Cpu(s)"`
+
+- `top`: Shows real-time system performance.
+- `-b`: **Batch mode** (non-interactive), useful for scripts.
+- `-n1`: Run **only one iteration** of top.
+- `grep "Cpu(s)"`: Filters output to show only CPU usage.
+
+📌 **Why?** You want a quick snapshot of CPU usage without launching the full interactive `top` interface.
+
+---
+
+### 💾 2. `free -m`
+
+- `free`: Displays memory usage.
+- `-m`: Shows values in **megabytes**.
+
+📌 **Why?** Easier to read memory stats in MB than in bytes.
+
+---
+
+### 💽 3. `df -h`
+
+- `df`: Reports disk space usage.
+- `-h`: **Human-readable** format (e.g., GB, MB).
+
+📌 **Why?** So you don’t have to interpret raw byte counts.
+
+---
+
+### 🔥 4. `ps -eo pid,comm,%cpu --sort=-%cpu | head -n 6`
+
+- `ps`: Shows running processes.
+- `-e`: Selects **all processes**.
+- `-o pid,comm,%cpu`: Custom output format:
+  - `pid`: Process ID
+  - `comm`: Command name
+  - `%cpu`: CPU usage
+- `--sort=-%cpu`: Sorts by CPU usage **descending**.
+- `head -n 6`: Shows top 5 processes + header.
+
+📌 **Why?** To identify which processes are using the most CPU.
+
+---
+
+### 🧠 5. `ps -eo pid,comm,%mem --sort=-%mem | head -n 6`
+
+Same as above, but:
+- `%mem`: Memory usage
+- `--sort=-%mem`: Sorts by memory usage descending
+
+📌 **Why?** To find memory-hungry processes.
+
+
+
+Here’s a complete Bash script for the [Server Performance Stats project](https://roadmap.sh/projects/server-stats). This script gathers all the required metrics and is designed to run on any Linux server.
+
+---
+
+### 📜 `server-stats.sh`
+
+```bash
+#!/bin/bash
+
+echo "===== Server Performance Stats ====="
+echo "Timestamp: $(date)"
+echo ""
+
+# 🧠 Total CPU Usage
+echo ">> CPU Usage:"
+top -bn1 | grep "Cpu(s)" | awk '{print "Used: " $2 + $4 "%"}'
+echo ""
+
+# 🧠 Total Memory Usage
+echo ">> Memory Usage:"
+free -m | awk 'NR==2{printf "Used: %sMB / %sMB (%.2f%%)\n", $3, $2, $3*100/$2 }'
+echo ""
+
+# 💾 Total Disk Usage
+echo ">> Disk Usage:"
+df -h --total | grep 'total' | awk '{print "Used: " $3 " / " $2 " (" $5 ")"}'
+echo ""
+
+# 🔥 Top 5 Processes by CPU
+echo ">> Top 5 Processes by CPU:"
+ps -eo pid,comm,%cpu --sort=-%cpu | head -n 6
+echo ""
+
+# 🔥 Top 5 Processes by Memory
+echo ">> Top 5 Processes by Memory:"
+ps -eo pid,comm,%mem --sort=-%mem | head -n 6
+echo ""
+
+# 🌟 Stretch Goals (Optional)
+echo ">> OS Version:"
+cat /etc/os-release | grep PRETTY_NAME | cut -d= -f2
+echo ""
+
+echo ">> Uptime:"
+uptime -p
+echo ""
+
+echo ">> Load Average:"
+uptime | awk -F'load average:' '{ print $2 }'
+echo ""
+
+echo ">> Logged In Users:"
+who | wc -l
+echo ""
+
+echo ">> Failed Login Attempts:"
+lastb | wc -l
+echo ""
+```
+
+---
+
+### 🚀 How to Use
+
+1. Save the script as `server-stats.sh`
+2. Make it executable:
+   ```bash
+   chmod +x server-stats.sh
+   ```
+3. Run it:
+   ```bash
+   ./server-stats.sh
+   ```
+
+---
+
+Would you like help uploading this to GitHub or customizing it for your EC2 instance?
+---
+Would you like a cheat sheet or script that combines all these into one easy-to-run
+ command?
