@@ -155,3 +155,9 @@ chmod +x logar.sh
 
 If you want, I can also prepare a GitHub README.md version with Markdown formatting and screenshots so it’s directly ready to publish.
 Do you want me to make that Markdown version next?
+
+
+<img width="1470" height="956" alt="Screenshot 2025-08-15 at 1 09 02 PM" src="https://github.com/user-attachments/assets/7cda62cb-6ec1-46e5-8cbc-b10d8f05b1d7" />
+
+
+
