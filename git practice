@@ -1,0 +1,113 @@
+Absolutely! Here's a quick and clear documentation of your Git workflow so far — perfect for reference or sharing with teammates 👇
+
+---
+
+## 🚀 Git Workflow: Tracking `cal.sh` in a New Repository
+
+### 📁 Step 1: Initialize a Git Repository
+
+```bash
+git init
+```
+
+- Creates an empty Git repository in `.git/`
+- You are now on the `master` branch
+- No commits exist yet
+
+---
+
+### 📝 Step 2: Create and Edit a File
+
+```bash
+vim cal.sh
+```
+
+- You opened `cal.sh` in Vim and likely added some content
+- If you try to run `cal.sh` directly like `cal.sh`, it fails because:
+  - It’s not marked executable
+  - It’s not in your `$PATH`
+
+To fix that:
+```bash
+chmod +x cal.sh
+./cal.sh
+```
+
+---
+
+### 🗑️ Step 3: File Deletion and Recreation
+
+```bash
+rm cal.sh
+vim cal.sh
+```
+
+- You deleted `cal.sh` and then recreated it
+- Git still sees it as a **new untracked file**
+
+---
+
+### 📌 Step 4: Check Git Status
+
+```bash
+git status
+```
+
+Output:
+- You're on `master`
+- No commits yet
+- `cal.sh` is **untracked**
+- Many other files are also untracked
+
+---
+
+### ✅ Step 5: Stage the File
+
+```bash
+git add cal.sh
+```
+
+Now `cal.sh` is staged for commit.
+
+```bash
+git status
+```
+
+Shows:
+- `cal.sh` is ready to be committed
+- Other files remain untracked
+
+---
+
+### 🧾 Optional: Commit the File
+
+```bash
+git commit -m "Add cal.sh script"
+```
+
+This will:
+- Create your first commit
+- Save `cal.sh` to the repository history
+
+---
+
+## 🧠 Notes
+
+- To unstage `cal.sh`:  
+  ```bash
+  git rm --cached cal.sh
+  ```
+
+- To track other files:  
+  ```bash
+  git add <filename>
+  ```
+
+- To add everything:  
+  ```bash
+  git add .
+  ```
+
+---
+
+Would you like me to turn this into a Markdown file or a README snippet for your project?
