@@ -268,6 +268,25 @@ Untracked files:
 	logar.sh
 	serverp.sh
 
+
+
+
+
+
+ubuntu@ip-172-31-38-189:~$diff --git a/cal.sh b/cal.sh
+index 94a54f3..f16319d 100644
+--- a/cal.sh
++++ b/cal.sh
+@@ -1 +1 @@
+-a+b
++a+b+c
+ubuntu@ip-172-31-38-189:~$ --- a/cal.sh
++++ b/cal.sh
+@@ -1 +1 @@
+-a+b
++a+b+c
+ubuntu@ip-172-31-38-189:~$  this  diif changes oly hapeing in  working directory
+
 no changes added to commit (use "git add" and/or "git commit -a")
 ubuntu@ip-172-31-38-189
 You can add this to your notes as a quick reference for understanding Git’s working directory and staging area. Want help turning this into a markdown file or flashcards?
