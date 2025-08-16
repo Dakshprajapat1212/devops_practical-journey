@@ -128,5 +128,35 @@ Permission denied (publickey)
 | Rollback           | Pulling out an old draft            |
 
 ---
+Got it! Based on the Git status message you just learned:
 
+---
+
+## 🧠 Git Concept: `modified` Status
+
+### 🔍 What It Means
+- When you run `git status`, and see:
+  ```bash
+  modified: cal.sh
+  ```
+  it means you've **changed the file `cal.sh`**, but haven't staged it yet.
+
+### 🛠️ Key Actions
+- **To include the changes in your next commit:**
+  ```bash
+  git add cal.sh
+  ```
+- **To discard the changes and revert to the last committed version:**
+  ```bash
+  git restore cal.sh
+  ```
+
+### 📌 Summary
+| Status     | Meaning                                 | Next Step                     |
+|------------|------------------------------------------|-------------------------------|
+| `modified` | File has been edited but not staged      | Use `git add` or `git restore` |
+
+---
+
+You can add this to your notes as a quick reference for understanding Git’s working directory and staging area. Want help turning this into a markdown file or flashcards?
 Would you like this turned into a Markdown file for your GitHub repo or saved as a README? I can format it for you!
