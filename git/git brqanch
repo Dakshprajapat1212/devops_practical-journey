@@ -1,0 +1,84 @@
+Absolutely! Here's a practical and easy-to-revise set of notes on **Git Branching Strategy**, based on the concepts covered in the video titled *"Day-10 | Git Branching Strategy | Real World Example | DevOps Interview Question"*.
+
+---
+
+## 🧠 Git Branching Strategy – Practical Notes
+
+### 🌱 What Is Branching in Git?
+- Branching allows developers to work on **different features, fixes, or experiments** independently.
+- The `main` or `master` branch is usually the **production-ready** code.
+- Other branches are used for development, testing, or staging.
+
+---
+
+### 🧩 Common Branch Types
+
+| Branch        | Purpose                                      |
+|---------------|----------------------------------------------|
+| `main` / `master` | Stable production code                     |
+| `dev`         | Active development and integration            |
+| `feature/*`   | Individual features or enhancements           |
+| `bugfix/*`    | Fixes for specific bugs                       |
+| `release/*`   | Prepares code for release                     |
+| `hotfix/*`    | Urgent fixes for production issues            |
+
+---
+
+### 🔄 Typical Workflow
+
+1. **Start from `dev` branch**:
+   ```bash
+   git checkout dev
+   git checkout -b feature/login
+   ```
+
+2. **Work on your feature**:
+   - Make changes
+   - Stage and commit:
+     ```bash
+     git add .
+     git commit -m "Add login feature"
+     ```
+
+3. **Push your branch**:
+   ```bash
+   git push origin feature/login
+   ```
+
+4. **Create a Pull Request (PR)**:
+   - Merge `feature/login` into `dev`
+   - After testing, merge `dev` into `main`
+
+---
+
+### 🚨 Why Use Branching Strategy?
+
+- Keeps production code stable
+- Enables parallel development
+- Simplifies testing and code reviews
+- Makes rollback and hotfixes easier
+
+---
+
+### 🧠 Real-World Analogy
+
+Imagine a team writing a book:
+- `main` = final published version
+- `dev` = working draft
+- `feature/*` = chapters being written
+- `release/*` = edited version ready for print
+- `hotfix/*` = typo fixes after publishing
+
+---
+
+### 🧪 Interview Tip
+
+If asked in a DevOps interview:
+> “Describe your Git branching strategy.”
+
+You can say:
+> “We follow a structured branching model with `main` for production, `dev` for integration, and feature branches for isolated development. We use pull requests for code review and merge into `main` only after thorough testing.”
+
+---
+
+Would you like this turned into a Markdown file for your GitHub repo or formatted as flashcards for revision?
