@@ -1,0 +1,35 @@
+Last login: Mon Aug 18 09:59:55 2025 from 152.59.75.100
+ubuntu@ip-172-31-38-189:~$ ls
+ansible      cal.sh        git.sh        log-archives  serverp.sh  y.pub
+awsusage.sh  carpenter.sh  git_practice  logar.sh      y
+ubuntu@ip-172-31-38-189:~$ ansible -i inventory all -m "shell" -a "touch  devops"
+[WARNING]: Unable to parse /home/ubuntu/inventory as an inventory source
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that
+the implicit localhost does not match 'all'
+ubuntu@ip-172-31-38-189:~$ cd anisble
+-bash: cd: anisble: No such file or directory
+ubuntu@ip-172-31-38-189:~$ cd ansible
+ubuntu@ip-172-31-38-189:~/ansible$ ansible -i inventory all -m "shell" -a "touch  devops"
+172.31.33.253 | CHANGED | rc=0 >>
+
+ubuntu@ip-172-31-38-189:~/ansible$
+
+
+
+target ->>
+
+ubuntu@ip-172-31-33-253:~$ cd home/ubuntu/.ssh
+-bash: cd: home/ubuntu/.ssh: No such file or directory
+ubuntu@ip-172-31-33-253:~$ cd /home/ubuntu/.ssh
+ubuntu@ip-172-31-33-253:~/.ssh$ ls
+authorized_keys  id_ed25519.pub  id_rsa.pub
+id_ed25519       id_rsa
+ubuntu@ip-172-31-33-253:~/.ssh$ vim authorized_keys  
+ubuntu@ip-172-31-33-253:~/.ssh$ 
+ubuntu@ip-172-31-33-253:~/.ssh$ cd ..
+ubuntu@ip-172-31-33-253:~$ ls
+devops
+ubuntu@ip-172-31-33-253:~$ pwd
+/home/ubuntu
+ubuntu@ip-172-31-33-253:~$ 
