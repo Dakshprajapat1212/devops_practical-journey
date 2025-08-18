@@ -1,0 +1,105 @@
+doucmetationnnnnn se sikh 
+
+Thanks for being honest—let’s break it down together. You're looking at a GitHub repo that contains **Ansible practicals for DevOps**, but the folder names and files might feel confusing at first glance. I’ll walk you through what each part is doing, with simple explanations and examples.
+
+---
+
+## 📁 Folder: `ansible adhoc cmnd connection and installtion`
+
+### ✅ What it’s doing:
+This folder likely contains **ad-hoc commands** used to:
+- Connect to remote servers
+- Install packages
+- Test SSH connectivity
+
+### 🧪 Example:
+```bash
+ansible all -m ping
+```
+This checks if all servers in your inventory are reachable.
+
+```bash
+ansible web -m shell -a "apt install nginx -y"
+```
+This installs Nginx on all servers in the `web` group using the `shell` module.
+
+---
+
+## 📁 File: `is shell module enough issue solved`
+
+### ✅ What it’s doing:
+This probably explores whether using only the `shell` module is enough for automation. Spoiler: it’s not ideal for everything.
+
+### 🧪 Example:
+```yaml
+- name: Install Apache using shell
+  shell: apt install apache2 -y
+```
+
+Better alternative:
+```yaml
+- name: Install Apache using apt module
+  apt:
+    name: apache2
+    state: present
+```
+
+The second one is **idempotent**—it won’t reinstall Apache if it’s already there.
+
+---
+
+## 📁 File: `wrong key used rac practical`
+
+### ✅ What it’s doing:
+This might be about **SSH key issues** when connecting to remote servers. If the wrong key is used, Ansible can't connect.
+
+### 🧪 Example:
+Check your inventory file:
+```ini
+[web]
+192.168.1.10 ansible_ssh_private_key_file=~/.ssh/id_rsa
+```
+
+Make sure the key file path is correct and the key has access to the server.
+
+---
+
+## 📁 File: `create file in target practical`
+
+### ✅ What it’s doing:
+This shows how to **create files on remote servers** using Ansible.
+
+### 🧪 Example:
+```yaml
+- name: Create a file
+  file:
+    path: /tmp/hello.txt
+    state: touch
+```
+
+This creates an empty file called `hello.txt` in `/tmp`.
+
+---
+
+## 📁 File: `problem faced when doing this ssh connection and notes`
+
+### ✅ What it’s doing:
+This likely documents **common SSH connection problems**, like:
+- Wrong IP
+- Wrong username
+- Firewall blocking port 22
+
+### 🧪 Example Fix:
+```ini
+[web]
+192.168.1.10 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
+```
+
+Make sure:
+- The IP is correct
+- The user exists on the remote server
+- The key matches the user
+
+---
+
+If you want, I can walk you through one of these files line by line and explain what each command or task is doing. Just tell me which one you want to start with.
