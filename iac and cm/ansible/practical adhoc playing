@@ -1,0 +1,42 @@
+main  ->>
+[WARNING]: provided hosts list is empty, only localhost is available. Note that
+the implicit localhost does not match 'all'
+ubuntu@ip-172-31-38-189:~$ cd inventory
+-bash: cd: inventory: No such file or directory
+ubuntu@ip-172-31-38-189:~$ cd ansible
+ubuntu@ip-172-31-38-189:~/ansible$  ansible -i inventory all -m "shell" -a "ls -ltr"
+172.31.33.253 | CHANGED | rc=0 >>
+total 0
+-rw-rw-r-- 1 ubuntu ubuntu 0 Aug 18 10:15 devops
+ubuntu@ip-172-31-38-189:~/ansible$  ansible -i inventory all -m "shell" -a "ls -ltr"
+172.31.33.253 | CHANGED | rc=0 >>
+total 0
+-rw-rw-r-- 1 ubuntu ubuntu 0 Aug 18 10:15 devops
+ubuntu@ip-172-31-38-189:~/ansible$  ansible -i inventory all -m "shell" -a "ls -a "
+172.31.33.253 | CHANGED | rc=0 >>
+.
+..
+.ansible
+.bash_history
+.bash_logout
+.bashrc
+.cache
+.profile
+.ssh
+.viminfo
+devops
+ubuntu@ip-172-31-38-189:~/ansible$
+
+
+
+
+/home/ubuntu
+ubuntu@ip-172-31-33-253:~$ cd ls -ltr
+-bash: cd: too many arguments
+ubuntu@ip-172-31-33-253:~$ ls -ltr
+total 0
+-rw-rw-r-- 1 ubuntu ubuntu 0 Aug 18 10:15 devops
+ubuntu@ip-172-31-33-253:~$ ls -a
+.   .ansible       .bash_logout  .cache    .ssh      devops
+..  .bash_history  .bashrc       .profile  .viminfo
+ubuntu@ip-172-31-33-253:~$ 
