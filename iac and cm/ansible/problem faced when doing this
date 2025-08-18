@@ -1,0 +1,122 @@
+while i was using inventory 
+
+
+Absolutely! Here's a clean and professional documentation draft you can include in your GitHub repo or share with your team. It explains the SSH public key issue and how to resolve it when working with Ansible and EC2 instances.
+
+---
+
+# 🔐 SSH Public Key Authentication Issue in Ansible
+
+## 🧩 Problem Statement
+
+When attempting to run Ansible commands or manually SSH into an EC2 instance using:
+
+```bash
+ssh ubuntu@172.31.33.253
+```
+
+You may encounter the following error:
+
+```
+Permission denied (publickey)
+```
+
+This means the SSH connection is failing because the target EC2 instance does not recognize the public key of your control node.
+
+---
+
+## 📌 Root Cause
+
+Ansible relies on SSH for remote communication. If the target machine does not have your public key in its `~/.ssh/authorized_keys` file, it will reject the connection. This is common when:
+
+- The public key was never copied to the target
+- The wrong user or key file is used
+- File permissions are incorrect
+
+---
+
+## ✅ Solution Steps
+
+### 1. **Generate SSH Key (if not already done)**
+
+On your Ansible control node:
+
+```bash
+ssh-keygen -t rsa -b 2048
+```
+
+This creates:
+- `~/.ssh/id_rsa` (private key)
+- `~/.ssh/id_rsa.pub` (public key)
+
+---
+
+### 2. **Copy Public Key to Target EC2 Instance**
+
+If `ssh-copy-id` is available:
+
+```bash
+ssh-copy-id -i ~/.ssh/id_rsa.pub ubuntu@172.31.33.253
+```
+
+If not, manually copy the key:
+
+```bash
+cat ~/.ssh/id_rsa.pub
+```
+
+Then SSH into the target using the `.pem` key:
+
+```bash
+ssh -i your-key.pem ubuntu@172.31.33.253
+```
+
+On the target EC2 instance:
+
+```bash
+mkdir -p ~/.ssh
+echo "your-public-key-content" >> ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+```
+
+---
+
+### 3. **Verify SSH Access**
+
+From your control node:
+
+```bash
+ssh ubuntu@172.31.33.253
+```
+
+If it logs in without a password, you're ready to use Ansible.
+
+---
+
+### 4. **Update Ansible Inventory (if needed)**
+
+In your inventory file:
+
+```ini
+[web]
+172.31.33.253 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
+```
+
+---
+
+## 🧠 Notes
+
+- Ensure both machines are in the same VPC or private network if using private IPs.
+- Security groups must allow inbound SSH (port 22).
+- File permissions on `.ssh` and `authorized_keys` must be strict.
+
+---
+
+## 📁 Reference
+
+This issue and solution are documented in the [Ansible section of the devops_practical-journey GitHub repo](https://github.com/Dakshprajapat1212/devops_practical-journey/tree/main/iac%20and%20cm/ansible).
+
+---
+
+Would you like me to format this as a Markdown file for direct upload to your repo?
