@@ -1,0 +1,95 @@
+# Why the Hyphens in Ansible YAML?
+
+Whenever you see a hyphen (`-`) in an Ansible playbook, it’s not a decorative dash—it’s YAML syntax for **list items**. Ansible playbooks are YAML files, and lists are fundamental to how playbooks, tasks, handlers, plays, and more are defined.
+
+---
+
+## 1. Document Start: Triple Dash (`---`)
+
+```yaml
+---
+- name: Install and Start Nginx
+  hosts: webservers
+  tasks:
+    # …
+```
+
+- The three hyphens at the very top (`---`) mark the **beginning of a YAML document**.
+- They aren’t strictly required by every parser, but they’re a best practice to signal “this is YAML.”
+
+---
+
+## 2. Plays as List Items
+
+```yaml
+- name: Install and Start Nginx
+  hosts: webservers
+  tasks:
+    # …
+- name: Configure Firewall
+  hosts: firewalls
+  tasks:
+    # …
+```
+
+- Each top-level `- name:` indicates a **play** in a playbook.
+- A play is one set of instructions against one or more hosts.
+- Hyphens here separate multiple plays in the same file.
+
+---
+
+## 3. Tasks as List Items
+
+```yaml
+tasks:
+  - name: Install Nginx
+    apt:
+      name: nginx
+      state: present
+
+  - name: Start Nginx
+    service:
+      name: nginx
+      state: started
+```
+
+- Under the `tasks:` key, the hyphens denote each **task** in order.
+- YAML treats everything under `tasks:` as a list, so each task needs its own list indicator.
+
+---
+
+## 4. Other Lists
+
+You’ll also see hyphens for:
+
+- **Handlers**:
+  ```yaml
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+  ```
+- **Roles inclusion**:
+  ```yaml
+  roles:
+    - common
+    - webserver
+  ```
+- **Loop items**:
+  ```yaml
+  with_items:
+    - nginx
+    - curl
+    - git
+  ```
+
+---
+
+## Quick Takeaway
+
+- Single hyphen (`-`) means “here starts a new item in this list.”
+- Triple hyphens (`---`) mark the start of your YAML document.
+- In Ansible, lists power plays, tasks, handlers, roles, loops, and more.
+
+By understanding the hyphens as **YAML list syntax**, you’ll read and write Ansible playbooks more confidently—and avoid syntax errors when adding your next task.
