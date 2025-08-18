@@ -132,4 +132,175 @@ Want more?
 - Explore community-contributed modules on [Ansible Galaxy](https://galaxy.ansible.com/).  
 - Start crafting **roles** to group related tasks, variables, templates, and handlers into reusable units.  
 
+
+Here’s a single Ansible playbook skeleton illustrating one task per major DevOps module category—pure YAML so you can grab, tweak and drop into your own repos:
+
+```yaml
+---
+- name: DevOps “Toolbox” Demo Playbook
+  hosts: all
+  become: yes
+
+  tasks:
+
+    # 1. Package Management
+    - name: Install Nginx on Debian/Ubuntu
+      apt:
+        name: nginx
+        state: present
+
+    - name: Install Git on CentOS/RedHat
+      yum:
+        name: git
+        state: present
+
+    - name: Install Python requests via pip
+      pip:
+        name: requests
+        state: present
+
+    - name: Install lodash via npm
+      npm:
+        name: lodash
+        global: yes
+
+    - name: Install rails gem
+      gem:
+        name: rails
+        state: present
+
+    # 2. Service & Process Control
+    - name: Ensure Nginx is running
+      service:
+        name: nginx
+        state: started
+
+    - name: Restart a systemd service
+      systemd:
+        name: docker
+        state: restarted
+
+    # 3. File, Directory & Template Management
+    - name: Copy a static config file
+      copy:
+        src: files/app.conf
+        dest: /etc/myapp/app.conf
+        owner: root
+        mode: '0644'
+
+    - name: Deploy an Nginx vhost from template
+      template:
+        src: templates/vhost.j2
+        dest: /etc/nginx/sites-available/demo.conf
+
+    # 4. Command & Shell Execution
+    - name: Run a simple shell command
+      shell: echo "Hello from {{ inventory_hostname }}"
+
+    - name: Bootstrap with raw when no Python present
+      raw: yum install -y python3
+
+    # 5. User, Group & SSH Key Management
+    - name: Create deploy user
+      user:
+        name: deploy
+        groups: sudo
+        shell: /bin/bash
+
+    - name: Add SSH key for deploy user
+      authorized_key:
+        user: deploy
+        key: "{{ lookup('file', 'keys/deploy.pub') }}"
+
+    # 6. Version Control & SCM
+    - name: Checkout app repo from GitHub
+      git:
+        repo: 'https://github.com/you/your-app.git'
+        dest: /opt/your-app
+        version: main
+
+    # 7. Networking & HTTP APIs
+    - name: Download release artifact
+      get_url:
+        url: https://example.com/artifact.tar.gz
+        dest: /tmp/artifact.tar.gz
+
+    - name: Call health-check API
+      uri:
+        url: http://localhost:8080/health
+        method: GET
+        status_code: 200
+
+    # 8. Cloud & Infrastructure Provisioning
+    - name: Launch an EC2 instance (AWS)
+      ec2:
+        key_name: mykey
+        instance_type: t2.micro
+        image: ami-0abcdef1234567890
+        wait: yes
+        region: us-east-1
+
+    # 9. Container & Orchestration
+    - name: Pull and run a Docker container
+      docker_container:
+        name: myapp
+        image: nginx:latest
+        state: started
+        ports:
+          - "80:80"
+
+    # 10. Database Management
+    - name: Create MySQL database
+      mysql_db:
+        name: myappdb
+        state: present
+
+    # 11. Monitoring & Notifications
+    - name: Send deployment notification to Slack
+      slack:
+        token: "{{ slack_token }}"
+        msg: "Deployment complete on {{ inventory_hostname }}"
+        channel: "#deployments"
+
+    # 12. Utility & Control Flow
+    - name: Print debug info
+      debug:
+        msg: "All tasks so far succeeded"
+
+    - name: Assert that a variable is defined
+      assert:
+        that:
+          - inventory_hostname is defined
+
+    - name: Pause for 10 seconds
+      pause:
+        seconds: 10
+
+    - name: Wait for web port to become available
+      wait_for:
+        host: 127.0.0.1
+        port: 80
+        timeout: 300
+
+    - name: Include role for common security hardening
+      include_role:
+        name: security-hardening
+
+    - name: Run maintenance block with error handling
+      block:
+        - name: Backup DB
+          shell: /usr/local/bin/backup-db.sh
+        - name: Rotate application logs
+          shell: /usr/local/bin/rotate-logs.sh
+      rescue:
+        - debug:
+            msg: "Maintenance failed, check logs!"
+
+    - name: End play and flush any handlers
+      meta: flush_handlers
+```
+
+— —
+
+Want to turn this skeleton into production-grade roles or split it into environment-specific playbooks? Let me know and I’ll show you how to modularize and DRY-up your Ansible code.
 With this “toolbox” of modules at your fingertips, you can confidently automate almost anything your DevOps workflow demands.
