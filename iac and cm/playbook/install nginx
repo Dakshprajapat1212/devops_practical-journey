@@ -1,0 +1,56 @@
+Last login: Mon Aug 18 13:27:12 2025 from 152.59.75.84
+ubuntu@ip-172-31-38-189:~$ cd ansible
+ubuntu@ip-172-31-38-189:~/ansible$ ls
+inventory  playbook.yml
+ubuntu@ip-172-31-38-189:~/ansible$ vim playbook.yml
+ubuntu@ip-172-31-38-189:~/ansible$  vim playbook.yml
+ubuntu@ip-172-31-38-189:~/ansible$ ansible-playbook -i inventory  playbook.yml
+
+PLAY [Install Nginx] ***********************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [172.31.33.253]
+
+TASK [Install nginx] ***********************************************************
+changed: [172.31.33.253]
+
+TASK [Start nginx] *************************************************************
+ok: [172.31.33.253]
+
+PLAY RECAP *********************************************************************
+172.31.33.253              : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+ubuntu@ip-172-31-38-189:~/ansible$ 
+ yml
+---
+- name: Install Nginx
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+
+        ---
+- name: Install Nginx
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+
