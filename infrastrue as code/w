@@ -1,0 +1,13 @@
+write(define infra and cinfig file)-> plan(review the chnages  terffom will make to your infrastruecture)
+
+
+->apply(terrform provisions ur infrastructure and updates the states file)
+
+
+
+what wehen u copy the tf file and foeegert to vhcange enivoremt and variable if error occurs then
+
+
+then terrrform apply , then if ther is mistake use before terrform plan for dey
+
+
