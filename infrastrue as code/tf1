@@ -1,0 +1,117 @@
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      Here's a detailed breakdown and documentation of the `terraform plan` output you've shared, explaining each part of the execution plan and its significance:
+
+---
+
+## 📘 Terraform Plan Overview
+
+The `terraform plan` command is used to preview the changes Terraform will make to your infrastructure. It compares your current configuration with the existing state and shows what actions will be taken—without actually applying them.
+
+In your case, Terraform is planning to **create** one resource: an AWS EC2 instance.
+
+---
+
+## 🏗️ Resource to Be Created
+
+### `aws_instance.app_server`
+
+This block defines an EC2 instance named `app_server`. Here's what each attribute means:
+
+| Attribute | Description |
+|----------|-------------|
+| `ami = "ami-830c94e3"` | Specifies the Amazon Machine Image (AMI) ID used to launch the instance. |
+| `instance_type = "t2.micro"` | Defines the instance type. `t2.micro` is a low-cost, burstable performance instance. |
+| `tags = { "Name" = "Terraform_Demo" }` | Adds a tag to the instance for identification. |
+| `source_dest_check = true` | Enables source/destination checks (default for EC2). |
+| `get_password_data = false` | Disables retrieval of Windows password data (irrelevant for Linux AMIs). |
+| `user_data_replace_on_change = false` | Prevents replacement of the instance if `user_data` changes. |
+
+### Attributes marked `(known after apply)`
+
+These are values that Terraform cannot determine until the resource is actually created. Examples include:
+
+- `arn`, `id`, `public_ip`, `private_ip`
+- `availability_zone`, `security_groups`, `subnet_id`
+- `metadata_options`, `root_block_device`, etc.
+
+These will be populated once the instance is provisioned.
+
+---
+
+## ✅ Execution Summary
+
+- **Plan:** 1 to add, 0 to change, 0 to destroy
+- This means Terraform will create one new resource and make no changes or deletions to existing infrastructure.
+
+---
+
+## ⚠️ Important Note
+
+> You didn't use the `-out` option to save this plan, so Terraform can't guarantee to take exactly these actions if you run `terraform apply`.
+
+This means the plan is speculative. If the infrastructure changes between now and when you run `terraform apply`, the actual actions may differ.
+
+To save the plan for later use:
+
+```bash
+terraform plan -out=tfplan
+terraform apply tfplan
+```
+
+---
+
+WSure! Here's a simple explanation for why your Terraform plan is called **speculative**:
+
+---
+
+### 🧪 What Does "Speculative" Mean in Terraform?
+
+When you run:
+
+```bash
+terraform plan
+```
+
+Terraform shows you what it *thinks* it will do—like creating a server, changing a setting, or deleting something. But it’s just a **preview**, not a promise.
+
+If you don’t save this plan using:
+
+```bash
+terraform plan -out=tfplan
+```
+
+then later, when you run:
+
+```bash
+terraform apply
+```
+
+Terraform will **re-check everything** and might come up with a slightly different plan. That’s why the first plan is called **speculative**—it’s not locked in.
+
+---
+
+### 🔒 How to Make It Exact
+
+If you want Terraform to do **exactly** what it showed in the plan, save it like this:
+
+```bash
+terraform plan -out=tfplan
+terraform apply tfplan
+```
+
+This way, Terraform won’t change its mind later.
+
+---
+
