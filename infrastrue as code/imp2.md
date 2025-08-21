@@ -1,4 +1,4 @@
- using input and op are really requires  like from github and anywhere for  thing like security group etc  if ewe dont writ crreditionalin a tf
+ using input and op  filee are really requires  like from github and anywhere for  thing like security group etc  if ewe dont writ crreditionalin a tf
 
 
 
