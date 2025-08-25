@@ -53,4 +53,156 @@ Soch Docker ek kitchen hai, aur Jenkins ek chef hai. Lekin chef ko kitchen ka ga
 
 ---
 
-Agar tu chahe to main ek chhoti si diagram ya flow bana ke aur bhi easy bana sakta hoon. Bataa, karu kya? 😄
+Ah, the classic Docker socket permission snag. You're **almost there**, but there's one subtle step missing that trips up many folks.
+
+---
+
+## 🔍 Why You're Still Getting “Permission Denied”
+
+Even after running:
+```bash
+usermod -aG docker jenkins
+```
+the **Jenkins user session hasn’t reloaded its group membership**. That means it still doesn’t “see” that it’s part of the `docker` group.
+
+---
+
+## ✅ Fix: Log Out and Log Back In
+
+You need to **fully log out and log back in** as the `jenkins` user to refresh group membership.
+
+### Try this:
+```bash
+exit
+su - jenkins
+docker run hello-world
+```
+
+If that still doesn’t work, try verifying group membership:
+
+```bash
+groups
+```
+
+You should see `docker` listed. If not, the group change hasn’t taken effect.
+
+---
+
+## 🧪 Bonus Check: Docker Socket Permissions
+
+Make sure the Docker socket is accessible to the `docker` group:
+
+```bash
+ls -l /var/run/docker.sock
+```
+
+Expected output:
+```
+srw-rw---- 1 root docker ...
+```
+
+If it’s not owned by `docker`, fix it with:
+```bash
+sudo chown root:docker /var/run/docker.sock
+sudo chmod 660 /var/run/docker.sock
+```
+
+---
+
+## 🧠 Pro Tip: Restart Jenkins Service
+
+Sometimes Jenkins (especially if running as a service) needs a restart to pick up new permissions:
+
+```bash
+sudo systemctl restart jenkins
+```
+
+---Ah, now I get what you're saying — you're seeing the **opposite** of what’s expected:
+
+- ✅ `jenkins@...$ docker run hello-world` → **works**
+- ❌ `root@...# docker run hello-world` → **doesn't work**
+
+That’s definitely unusual, but not unheard of. Let’s break down the possible reasons and what might be happening under the hood.
+
+---
+
+## 🧩 Possible Reasons Why `root` Fails but `jenkins` Works
+
+### 1. **Docker Daemon Socket Permissions Changed**
+The Docker socket (`/var/run/docker.sock`) might have been reconfigured to allow access **only to the `docker` group**, and your `jenkins` user is in that group — but `root` somehow isn’t using the expected environment.
+
+Check this:
+```bash
+ls -l /var/run/docker.sock
+```
+
+Expected output:
+```
+srw-rw---- 1 root docker ...
+```
+
+If it’s not owned by `docker`, or if permissions are off, root might be blocked.
+
+---
+
+### 2. **Environment Variables or Aliases**
+Sometimes, the `jenkins` user might have environment variables or Docker CLI aliases set that point to a **remote Docker daemon** or a different socket path.
+
+Run this as both users:
+```bash
+echo $DOCKER_HOST
+```
+
+If `jenkins` has something like `tcp://localhost:2375` and root doesn’t, that explains the difference.
+
+---
+
+### 3. **Docker Daemon Not Running for Root’s Context**
+If Docker was started in a user-specific context (like via systemd user service or socket activation), root might not be connected to the same daemon.
+
+Try:
+```bash
+ps aux | grep dockerd
+```
+
+And:
+```bash
+docker info
+```
+
+Compare outputs between `root` and `jenkins`.
+
+---
+
+### 4. **SELinux or AppArmor Restrictions**
+If you're on a hardened system, security modules like SELinux or AppArmor can restrict root access to certain sockets or processes. This is rare but possible.
+
+---
+
+## 🧪 Quick Fixes to Try
+
+- Restart Docker cleanly:
+  ```bash
+  sudo systemctl restart docker
+  ```
+
+- Recheck group memberships:
+  ```bash
+  groups root
+  groups jenkins
+  ```
+
+- Try running with explicit socket path:
+  ```bash
+  docker -H unix:///var/run/docker.sock run hello-world
+  ```
+
+---
+
+## 🎥 Based on the Video You're Watching
+
+In the tutorial, the instructor runs `docker run hello-world` **after switching to `jenkins`**, and it works because the `jenkins` user was added to the `docker` group and the Docker daemon was restarted. If you're seeing the reverse behavior, it’s likely a local config or permission quirk.
+
+---
+
+Want to debug this live together? I can walk you through each check and help pinpoint the exact cause.
