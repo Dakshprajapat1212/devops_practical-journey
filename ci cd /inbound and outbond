@@ -1,0 +1,38 @@
+Great question! These terms—**inbound** and **outbound**—are used in networking, cloud security, and firewall configurations to describe the direction of traffic relative to a system or server.
+
+---
+
+## 🚦 Inbound vs Outbound Traffic
+
+| Term       | Description                                                                 | Example Use Case                          |
+|------------|------------------------------------------------------------------------------|-------------------------------------------|
+| **Inbound**  | Traffic **coming into** your system from external sources                    | A user accessing your Jenkins dashboard via port 8080 |
+| **Outbound** | Traffic **leaving** your system to external destinations                    | Your Jenkins server pulling code from GitHub |
+
+---
+
+## 🔐 In AWS Security Groups
+
+In the video you're following, the instructor explains this clearly when setting up Jenkins on an EC2 instance:
+
+- **Inbound Rules**:  
+  These define what kind of traffic is allowed **into** your EC2 instance.  
+  Example: Allowing TCP traffic on port `8080` so users can access Jenkins from their browser.
+
+- **Outbound Rules**:  
+  These define what kind of traffic is allowed **out of** your EC2 instance.  
+  Example: Jenkins reaching out to GitHub or Docker Hub to fetch code or images.
+
+By default, AWS allows **all outbound traffic** but **blocks inbound traffic**, which is why you need to manually allow port `8080` for Jenkins to be accessible from the outside world.
+
+---
+
+## 🧠 Real-World Analogy
+
+Think of your EC2 instance like a house:
+- **Inbound** is someone ringing your doorbell (trying to access your server).
+- **Outbound** is you making a phone call or ordering food online (your server reaching out).
+
+---
+
+Let me know if you want help configuring your security group or understanding how Jenkins uses these rules during builds and deployments.
