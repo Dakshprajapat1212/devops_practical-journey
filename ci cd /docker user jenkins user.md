@@ -197,6 +197,69 @@ If you're on a hardened system, security modules like SELinux or AppArmor can re
   docker -H unix:///var/run/docker.sock run hello-world
   ```
 
+When you run the command:
+
+```bash
+docker run hello-world
+```
+
+you're triggering a **simple test** to verify that Docker is installed and working correctly on your system. Here's what happens behind the scenes:
+
+---
+
+## 🧪 Step-by-Step Breakdown
+
+1. **Docker Client Contacts Docker Daemon**
+   - The CLI (`docker`) sends a request to the Docker daemon (`dockerd`) to run a container using the `hello-world` image.
+
+2. **Image Lookup**
+   - Docker checks if the `hello-world` image is available locally.
+   - If not found, it **pulls** the image from [Docker Hub](https://hub.docker.com/_/hello-world) — the default public registry.
+
+3. **Container Creation**
+   - Docker creates a **new container** from the `hello-world` image.
+   - This image contains a tiny program that simply prints a message.
+
+4. **Execution**
+   - The container runs and outputs:
+     ```
+     Hello from Docker!
+     This message shows that your installation appears to be working correctly.
+     ```
+
+5. **Container Exits**
+   - After printing the message, the container **exits immediately** because its job is done.
+
+---
+
+## 📦 What’s Inside the `hello-world` Image?
+
+It’s a minimal image (just ~1.84 KB!) with a compiled binary that:
+- Confirms Docker is working
+- Explains the steps Docker took to run the container
+- Suggests next steps for using Docker
+
+---
+
+## 🧠 Why Is This Useful?
+
+- It’s a **sanity check** for your Docker setup.
+- Confirms:
+  - Docker daemon is running
+  - You can pull images from Docker Hub
+  - Containers can be created and executed
+
+---
+
+If you're curious, you can inspect the container afterward:
+
+```bash
+docker ps -a
+```
+
+You’ll see the exited `hello-world` container listed there.
+
+Want to try something more advanced next — like running an Ubuntu container or building your own image?
 ---
 
 ## 🎥 Based on the Video You're Watching
