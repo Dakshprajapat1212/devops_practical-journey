@@ -1,0 +1,168 @@
+# Practical Guide to Linux Privileges and `sudo`
+
+---
+
+## Understanding User and Root Identities
+
+Linux distinguishes between regular users and the superuser (root) by assigning each account a unique user ID (UID). The root account always has UID 0 and can perform any task on the system. Regular users have nonzero UIDs and limited permissions by default.
+
+Logging in as root gives full control but increases risk of accidental or malicious system changes. Using a regular user account and elevating privileges only when needed provides a safer, more auditable workflow.
+
+---
+
+## Checking Your Current User
+
+You can verify who you are at any time using:
+
+```bash
+whoami
+```
+
+If the output is `root`, you are the superuser. Any other username reflects a regular user account.
+
+To see your numeric UID:
+
+```bash
+id -u
+```
+
+A result of `0` confirms root; any other number indicates a normal user.
+
+---
+
+## How Linux Authenticates Users
+
+When you enter a password, Linux follows these steps:
+
+- Lookup in `/etc/passwd` to confirm the username exists  
+- Retrieve the hashed password and salt from `/etc/shadow`  
+- Hash the entered password with the same algorithm and salt  
+- Compare the new hash with the stored hash; match means authentication succeeds  
+
+The `/etc/shadow` file is readable only by root to protect hashed passwords from prying eyes.
+
+---
+
+## Managing Users and Groups
+
+Proper user and group management helps isolate services, control access, and maintain accountability.
+
+### Create a New User
+
+```bash
+sudo adduser devuser
+```
+
+This command creates `devuser`, prompts for a password and user details, and sets up a home directory.
+
+### Create a New Group
+
+```bash
+sudo groupadd devops
+```
+
+This command creates a group named `devops` without adding any users to it.
+
+### Assign a User to a Group
+
+```bash
+sudo usermod -aG devops devuser
+```
+
+This adds `devuser` to the `devops` group, granting group permissions to shared resources.
+
+---
+
+## Configuring `sudo` Access
+
+Granting `sudo` access lets trusted users perform specific privileged tasks without full root login.
+
+### The `/etc/sudoers` File
+
+Edit with caution using `visudo` to prevent syntax errors:
+
+```bash
+sudo visudo
+```
+
+Inside, lines like these grant full or limited `sudo` rights:
+
+```
+ubuntu  ALL=(ALL) NOPASSWD: /usr/bin/systemctl restart nginx
+devops   ALL=(ALL) ALL
+```
+
+### Granting Specific Command Permissions
+
+To allow `devuser` to run only package updates:
+
+```
+devuser ALL=(ALL) NOPASSWD: /usr/bin/apt update, /usr/bin/apt upgrade
+```
+
+This restricts `sudo` use to the two listed commands.
+
+### Auditing `sudo` Usage
+
+Every `sudo` invocation is logged to `/var/log/auth.log` or `/var/log/secure`. You can filter for `sudo` entries:
+
+```bash
+sudo grep sudo /var/log/auth.log
+```
+
+Review logs regularly to detect unauthorized attempts.
+
+---
+
+## Securing SSH Access
+
+SSH keys combined with security rules strengthen remote login security.
+
+### AWS Security Group for SSH
+
+| Type | Protocol | Port Range | Source                 | Purpose                        |
+|------|----------|------------|------------------------|--------------------------------|
+| SSH  | TCP      | 22         | My IP (`203.0.113.42/32`)| Allow your workstation only    |
+
+Restricting the source to your IP reduces exposure to internet scans and brute-force attacks.
+
+### Disable Password Authentication
+
+In `/etc/ssh/sshd_config`, set:
+
+```
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+```
+
+Then restart SSH:
+
+```bash
+sudo systemctl restart sshd
+```
+
+This ensures only key-based logins succeed.
+
+---
+
+## AWS IAM vs. OS Users
+
+AWS Identity and Access Management (IAM) controls who can start, stop, and configure EC2 instances, but it does not govern internal Linux user permissions. Managing OS-level users and `sudo` remains your responsibility once the instance is running.
+
+| Scope              | Manages                                | Examples                                    |
+|--------------------|----------------------------------------|---------------------------------------------|
+| AWS IAM            | Cloud resource access and policies     | Launch instances, modify security groups    |
+| Linux OS accounts  | On-machine permissions and services    | File access, service control, `sudo` rights |
+
+---
+
+## Best Practices Summary
+
+- Use regular user accounts for daily work; elevate with `sudo` only when needed  
+- Keep `/etc/shadow` protected and enforce strong password policies  
+- Limit `sudo` permissions to specific commands where possible  
+- Audit `sudo` logs and user group memberships periodically  
+- Restrict SSH access via key-based auth and narrow security group rules  
+- Separate cloud-level IAM controls from OS-level user management  
+
+Implementing these steps ensures you maintain a secure, auditable environment both in the cloud and on your Linux instances.
