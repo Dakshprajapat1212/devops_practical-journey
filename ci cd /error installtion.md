@@ -93,8 +93,33 @@ Both should show 21.x.x.
 sudo systemctl restart jenkins
 sudo systemctl status jenkins -l
 
-It should now start without failing.
+solved -o VM guests are running outdated hypervisor (qemu) binaries on this host.
+ubuntu@ip-172-31-38-189:/var/log/jenkins$ javac -version
+java -version
+javac 21.0.8
+openjdk version "21.0.8" 2025-07-15
+OpenJDK Runtime Environment (build 21.0.8+9-Ubuntu-0ubuntu124.04.1)
+OpenJDK 64-Bit Server VM (build 21.0.8+9-Ubuntu-0ubuntu124.04.1, mixed mode, sharing)
+ubuntu@ip-172-31-38-189:/var/log/jenkins$ sudo systemctl restart jenkins
+sudo systemctl status jenkins -l
+● jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; pre>
+     Active: active (running) since Mon 2025-08-25 07:52:11 UTC; 82ms ago
+   Main PID: 7192 (java)
+      Tasks: 40 (limit: 1121)
+     Memory: 319.9M (peak: 323.5M)
+        CPU: 17.700s
+     CGroup: /system.slice/jenkins.service
+             └─7192 /usr/bin/java -Djava.awt.headless=true -jar /usr/share>
 
-Do you want me to also show you how to set JAVA_HOME properly (in case Jenkins still can’t detect Java)?
-
-Do you want me to also give you a clean rollback command to remove your override so Jenkins uses its default config (to quickly make it run again)?
+Aug 25 07:52:03 ip-172-31-38-189 jenkins[7192]: Jenkins initial setup is r>
+Aug 25 07:52:03 ip-172-31-38-189 jenkins[7192]: Please use the following p>
+Aug 25 07:52:03 ip-172-31-38-189 jenkins[7192]: 2d3f96e1a85c4416b35fd9b3ef>
+Aug 25 07:52:03 ip-172-31-38-189 jenkins[7192]: This may also be found at:>
+Aug 25 07:52:03 ip-172-31-38-189 jenkins[7192]: **************************>
+Aug 25 07:52:03 ip-172-31-38-189 jenkins[7192]: **************************>
+Aug 25 07:52:03 ip-172-31-38-189 jenkins[7192]: **************************>
+Aug 25 07:52:11 ip-172-31-38-189 jenkins[7192]: 2025-08-25 07:52:11.343+00>
+Aug 25 07:52:11 ip-172-31-38-189 jenkins[7192]: 2025-08-25 07:52:11.375+00>
+Aug 25 07:52:11 ip-172-31-38-189 systemd[1]: Started jenkins.service - Jen>
+lines 1-20/20 (
