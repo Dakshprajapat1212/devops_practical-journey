@@ -1,0 +1,48 @@
+Based on the output you shared:
+
+```bash
+ps -ef | grep jenkins
+ubuntu      7315    6417  0 05:37 pts/1    00:00:00 grep --color=auto jenkins
+```
+
+This only shows the `grep` command itself running—it does **not** confirm that Jenkins is running. If Jenkins were active, you'd see a process like:
+
+```
+jenkins   1234     1  0 05:00 ?    00:00:30 /usr/bin/java -jar /usr/share/jenkins/jenkins.war
+```
+
+---
+
+## ✅ How to Check If Jenkins Is Running
+
+Try these steps:
+
+### 1. **Check Jenkins Service Status**
+```bash
+sudo systemctl status jenkins
+```
+This will show whether Jenkins is:
+- `active (running)` ✅
+- `inactive` ❌
+- `failed` ❌
+
+### 2. **Check Listening Port**
+Jenkins usually runs on port `8080`. You can check if it's listening:
+```bash
+sudo netstat -tulnp | grep 8080
+```
+or
+```bash
+sudo lsof -i :8080
+```
+
+### 3. **Try Accessing Jenkins in Browser**
+If you're on a cloud VM (like AWS EC2), open:
+```
+http://<your-public-ip>:8080
+```
+Make sure port 8080 is allowed in your security group.
+
+---
+
+Let me know what you see when you run `systemctl status jenkins`, and I’ll help you troubleshoot further if needed.
