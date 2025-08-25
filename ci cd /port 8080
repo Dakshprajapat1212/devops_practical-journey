@@ -44,5 +44,19 @@ http://<your-public-ip>:8080
 Make sure port 8080 is allowed in your security group.
 
 ---
+s
+ubuntu@ip-172-31-41-241:~$ sudo systemctl status jenkins
+× jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; pr>
+     Active: failed (Result: exit-code) since Mon 2025-08-25 05:21:46 UTC>
+    Process: 7237 ExecStart=/usr/bin/jenkins (code=exited, status=1/FAILU>
+   Main PID: 7237 (code=exited, status=1/FAILURE)
+        CPU: 502ms
 
-Let me know what you see when you run `systemctl status jenkins`, and I’ll help you troubleshoot further if needed.
+Aug 25 05:21:46 ip-172-31-41-241 systemd[1]: jenkins.service: Failed with>
+Aug 25 05:21:46 ip-172-31-41-241 systemd[1]: Failed to start jenkins.serv>
+Aug 25 05:21:46 ip-172-31-41-241 systemd[1]: jenkins.service: Scheduled r>
+Aug 25 05:21:46 ip-172-31-41-241 systemd[1]: jenkins.service: Start reque>
+Aug 25 05:21:46 ip-172-31-41-241 systemd[1]: jenkins.service: Failed with>
+Aug 25 05:21:46 ip-172-31-41-241 systemd[1]: Failed to start jenkins.serv>
+lines 1-13/13 (END)
