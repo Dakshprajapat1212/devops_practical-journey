@@ -63,7 +63,38 @@ sudo systemctl status jenkins
 ⚡ Hannu, right now we need to see the exact error from Jenkins logs. Can you run:
 
 sudo journalctl -u jenkins -xe | tail -n 30
+Got it ✅ — right now you only have the JRE (runtime) but not the JDK (compiler).
+That’s why javac is missing, and Jenkins needs the JDK to run properly.
 
-and share the last 20–30 lines here? That will tell us exactly why it’s failing.
+To fix this, install the JDK:
+
+sudo apt update
+sudo apt install openjdk-21-jdk -y
+
+(or if you prefer the headless version for servers:
+
+sudo apt install openjdk-21-jdk-headless -y
+```)  
+
+---
+
+### After installing:
+Check again:  
+```bash
+javac -version
+java -version
+
+Both should show 21.x.x.
+
+⸻
+
+👉 Once that’s working, restart Jenkins:
+
+sudo systemctl restart jenkins
+sudo systemctl status jenkins -l
+
+It should now start without failing.
+
+Do you want me to also show you how to set JAVA_HOME properly (in case Jenkins still can’t detect Java)?
 
 Do you want me to also give you a clean rollback command to remove your override so Jenkins uses its default config (to quickly make it run again)?
