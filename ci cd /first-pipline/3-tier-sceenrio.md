@@ -1,4 +1,5 @@
-In the video, Abhishek explains a **real-world scenario** involving a **three-tier application architecture**—commonly used in enterprise environments—and how to handle its CI/CD pipeline using Jenkins with Docker agents. Here's the breakdown:
+
+<img width="1470" height="956" alt="Screenshot 2025-08-27 at 1 00 03 AM" src="https://github.com/user-attachments/assets/72a45733-1b79-49ba-bf99-d245604f20f4" />
 
 ---
 
