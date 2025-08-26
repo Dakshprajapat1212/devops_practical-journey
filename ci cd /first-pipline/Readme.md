@@ -1,4 +1,9 @@
 
+
+
+
+
+
 # A simple jenkins pipeline to verify if the docker slave configuration is working as expected.
 
 Nice 👌 You pasted a real Jenkins Declarative Pipeline snippet. Let me break it down line by line, and explain what’s actually happening in Jenkins behind the scenes.
