@@ -1,3 +1,9 @@
+
+when u builidng in jenkins chek docker ps -a 
+
+its show all process running  in building as completed all deleted
+
+
 <img width="1470" height="956" alt="Screenshot 2025-08-27 at 12 32 32 AM" src="https://github.com/user-attachments/assets/5e141a9d-f2c3-489c-9008-6280d7bf4171" />
 <img width="1470" height="956" alt="Screenshot 2025-08-27 at 12 33 03 AM" src="https://github.com/user-attachments/assets/7b9fa6d6-ee4b-4f11-bd87-37369ca13f0c" />
 <img width="1470" height="956" alt="Screenshot 2025-08-27 at 12 33 27 AM" src="https://github.com/user-attachments/assets/e37a548a-0a5d-43bc-9b52-1d87eade8a99" />
