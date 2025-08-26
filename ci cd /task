@@ -1,7 +1,8 @@
 do changes 
 
 
-build real ci cd for application
+build real ci cd for application  try argo cd sometime , can also ansible
+for cd
 
 build artifacts
 
