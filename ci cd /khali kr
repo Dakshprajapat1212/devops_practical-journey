@@ -1,0 +1,305 @@
+You're sitting at 81% disk usage on `/dev/root`, which is tight enough to slow Jenkins down significantly. Let’s clean up your server and reclaim space smartly:
+
+---
+
+### 🧹 Step-by-Step Cleanup Guide
+
+#### 1. **Clear Jenkins Build History**
+Jenkins stores old builds that can pile up fast.
+```bash
+sudo rm -rf /var/lib/jenkins/jobs/*/builds/*
+```
+> You can also configure Jenkins to automatically discard old builds under **Job → Configure → Build Discarder**.
+
+---
+
+#### 2. **Clean APT Cache (for Debian/Ubuntu)**
+```bash
+sudo apt-get clean
+sudo apt-get autoremove
+```
+This removes cached packages and unused dependencies.
+
+---
+
+#### 3. **Remove Old Logs**
+System logs can grow quietly in the background.
+```bash
+sudo journalctl --vacuum-time=7d
+sudo rm -rf /var/log/*.gz /var/log/*.[0-9]
+```
+
+---
+
+#### 4. **Check for Large Files**
+Find and review the biggest files hogging space:
+```bash
+sudo du -ah / | sort -rh | head -n 20
+
+
+Sure! Let's break down this command into simple parts so you can understand exactly what it's doing:
+
+---
+
+### 🧾 Full Command:
+```bash
+sudo du -ah / | sort -rh | head -n 20
+```
+
+This command helps you **find the top 20 largest files and folders** on your system starting from the root `/` directory.
+
+---
+
+### 🔍 Breakdown:
+
+| Part | Meaning |
+|------|--------|
+| `sudo` | Runs the command with **admin/root permissions**, so it can access all files |
+| `du -ah /` | `du` means "disk usage" <br> `-a` includes **files and folders** <br> `-h` shows sizes in **human-readable format** (like MB, GB) <br> `/` means start checking from the **root directory** |
+| `|` | This is a **pipe**, which sends the output of one command into the next |
+| `sort -rh` | Sorts the list: <br> `-r` = reverse (largest first) <br> `-h` = human-readable format (so it understands MB, GB etc.) |
+| `head -n 20` | Shows only the **top 20 results** from the sorted list |
+
+---
+
+### 📦 What You Get:
+A list of the **20 biggest files or folders** on your system, like:
+```
+2.5G  /var/lib/docker
+1.8G  /var/lib/jenkins
+900M  /usr/lib
+...
+```
+
+This helps you **quickly find what's eating up your disk space** so you can clean it up.
+
+---
+
+Want help analyzing your output or deciding what’s safe to delete? Just paste the results here and I’ll guide you.
+```
+Delete what’s unnecessary—but be cautious with system files.
+
+---
+
+#### 5. **Clear Docker Images & Containers (if using Docker)**
+```bash
+docker system prune -a
+```
+This wipes unused containers, images, and networks.
+
+---
+
+#### 6. **Remove Temp Files**
+```bash
+sudo rm -rf /tmp/*
+```
+
+---
+
+### 📊 Bonus: Monitor Disk Usage
+Install `ncdu` for a visual breakdown:
+```bash
+sudo apt install ncdu
+sudo ncdu /
+```
+
+---
+You're absolutely right to notice — your Terraform folder is eating up **346 MB**, which is a big chunk considering your total disk space is only around 6.8 GB. Let me explain why this happens and how you can clean it up safely.
+
+---
+
+### 🧱 Why Terraform Is Using So Much Space
+
+The bulk of the space is coming from this path:
+```
+./terraform/.terraform/providers/registry.terraform.io/hashicorp/aws/4.67.0/linux_amd64
+```
+
+This is where Terraform stores:
+- **Downloaded provider binaries** (like AWS, Azure, etc.)
+- **Plugin versions** for each project
+- **Dependency metadata**
+
+Every time you run `terraform init`, it downloads the required providers and stores them locally in `.terraform/`. If you work on multiple projects or reinitialize often, this folder can grow fast.
+
+---
+
+### 🧹 How to Clean It Up
+
+#### ✅ Option 1: Delete `.terraform` Folder
+If you're done with the project or want to reinitialize:
+```bash
+rm -rf ./terraform/.terraform
+```
+Then re-run:
+```bash
+terraform init
+```
+This will re-download only what’s needed.
+
+---
+
+#### ✅ Option 2: Use `terraform providers mirror` (Advanced)
+You can mirror providers to a shared location and avoid downloading them repeatedly. Useful for CI/CD pipelines or multiple projects.
+
+---
+
+#### ✅ Option 3: Global Cleanup (if you have multiple projects)
+Check your home directory:
+```bash
+du -sh ~/.terraform.d
+```
+You can clean it if it's large:
+```bash
+rm -rf ~/.terraform.d
+```
+
+---
+
+### ⚠️ Be Careful
+- Don’t delete `.tf` files — they contain your actual infrastructure code.
+- Only remove `.terraform/` and `.terraform.d` if you're okay reinitializing.
+
+---
+
+Want help setting up a lightweight Terraform workflow or cleaning up other tools like Docker or Jenkins? I can help you optimize your whole dev environment.
+Let me know your OS and whether Jenkins is running with Docker or natively—I can tailor this even more. Want help setting up auto-clean scripts?
+Yes — the `.terraform` folder and its contents are automatically created **when you run Terraform scripts**, especially after using:
+
+```bash
+terraform init
+```
+
+This command downloads all required **providers**, **modules**, and **plugin binaries** (like the AWS provider you saw), and stores them locally in the `.terraform` directory. That’s why your disk showed 346 MB used just by Terraform — it’s caching everything needed to run your infrastructure code.
+
+---
+
+### 🧹 If You Want to Remove All Terraform-Related Files
+
+Here’s what you can safely delete:
+
+#### ✅ 1. **Project-specific Terraform cache**
+```bash
+rm -rf ./terraform/.terraform
+```
+
+#### ✅ 2. **Global Terraform config (optional)**
+```bash
+rm -rf ~/.terraform.d
+```
+
+#### ✅ 3. **Any `.tf` files or state files (only if you're done with the project)**
+```bash
+rm -rf *.tf *.tfstate*
+```
+> ⚠️ Be careful: `.tf` files are your actual infrastructure code. Only delete them if you no longer need the project.
+
+---
+
+### 🔁 Will It Come Back?
+Yes — if you run `terraform init` again, it will recreate the `.terraform` folder and download providers again. That’s normal behavior.
+
+-Absolutely! Let's break down the command `rm -rf *.tf *.tfstate*` in simple terms:
+
+---
+
+### 🧨 What This Command Does
+
+```bash
+rm -rf *.tf *.tfstate*
+```
+
+This command **forcefully deletes** certain Terraform-related files from your current directory.
+
+---
+
+### 🔍 Breakdown of Each Part
+
+| Part | Meaning |
+|------|--------|
+| `rm` | Stands for "remove" — used to delete files or folders |
+| `-r` | Recursive — needed if you're deleting folders (not used here but included just in case) |
+| `-f` | Force — skips confirmation prompts and deletes without asking |
+| `*.tf` | Deletes **all files ending in `.tf`** (Terraform configuration files) |
+| `*.tfstate*` | Deletes **all files starting with `.tfstate`**, including `.tfstate`, `.tfstate.backup`, etc. |
+
+---
+
+### 🧱 What These Files Are
+
+- **`.tf` files**: These are your **Terraform scripts** — they define infrastructure (like EC2, S3, VPC).
+- **`.tfstate` files**: These store the **current state of your infrastructure** — Terraform uses them to track what’s deployed.
+
+---
+
+### ⚠️ Warning Before Running
+
+- If you delete `.tf` files, you lose your infrastructure code.
+- If you delete `.tfstate` files, Terraform forgets what it deployed — this can cause **conflicts or duplication** if you run scripts again.
+
+---
+
+### ✅ When It's Safe to Use
+
+- You're cleaning up a test project
+- You’ve backed up important files
+- You want to reset Terraform and start fresh
+
+---
+Got it — you want to free up RAM on your Jenkins EC2 instance. Since your system has under 1 GB of RAM and most of it is already used, here's a focused cleanup plan to reclaim memory without breaking Jenkins or Docker:
+
+---
+
+### 🧠 Step-by-Step: Free Up RAM Safely
+
+#### 1. **Stop Unnecessary Services**
+Check what's running and stop anything non-essential:
+```bash
+sudo systemctl list-units --type=service --state=running
+```
+Then stop anything you don’t need:
+```bash
+sudo systemctl stop <service-name>
+```
+
+#### 2. **Kill Zombie or Idle Processes**
+List processes by memory usage:
+```bash
+ps aux --sort=-%mem | head -20
+```
+Kill anything suspicious or idle:
+```bash
+sudo kill -9 <PID>
+```
+
+#### 3. **Clear Cached Memory**
+This won’t affect Jenkins or Docker:
+```bash
+sudo sync; echo 3 | sudo tee /proc/sys/vm/drop_caches
+```
+
+#### 4. **Restart Jenkins & Docker (Optional but Effective)**
+This can flush memory leaks:
+```bash
+sudo systemctl restart jenkins
+sudo systemctl restart docker
+```
+
+#### 5. **Monitor RAM Usage Live**
+Use `htop` for a live view:
+```bash
+sudo apt-get install htop
+htop
+```
+
+---
+
+### ⚠️ Pro Tip: Avoid Over-Clearing
+
+Don’t remove buffers/cache aggressively — Linux uses them to speed things up. Only drop caches if memory pressure is high.
+
+---
+
+Want me to help you write a script that does all this in one go? Or would you prefer to upgrade your EC2 instance for smoother performance long-term?
+
+Want help safely resetting your Terraform setup or backing up your state before cleaning? I can guide you step-by-step.
