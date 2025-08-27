@@ -127,7 +127,16 @@ Jenkins pipelines are more customizable but require more setup — like installi
 
 In the video you're watching, the instructor shows how to define multiple GitHub Actions for different tasks — like CI builds, PR checks, and deployments — and compares them to Jenkins pipelines.
 
-Want me to help you write a sample GitHub Actions workflow or Jenkinsfile for your own project? I can tailor it to whatever tech stack you're using.
+ if you define on: push in your GitHub Actions workflow, it will only trigger when a push event occurs. That means:
+
+✅ It runs when someone pushes commits to the repository.
+
+❌ It does not run for pull requests, issues, releases, or any other GitHub events.
+
+
+
+
+
 
 
 
