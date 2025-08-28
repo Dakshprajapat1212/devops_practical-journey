@@ -1,4 +1,5 @@
-
+how to attach this self hosted runnerr with action 
+and how they coommnubnicate
 # GitHub Actions self‑hosted runner on AWS EC2: complete step‑by‑step
 
 This is a practical, end‑to‑end guide that mirrors the workflow shown in the referenced video and expands it with production‑grade details, gotchas, and exact commands. You’ll set up an EC2 instance as a self‑hosted runner, wire it to a GitHub repository, switch a workflow from GitHub‑hosted to self‑hosted, and validate the job execution and networking. Where the video makes specific choices, those are noted and cited.
