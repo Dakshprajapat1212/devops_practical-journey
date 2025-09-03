@@ -1,3 +1,14 @@
+
+
+
+<img width="1470" height="956" alt="Screenshot 2025-09-04 at 12 39 37 AM" src="https://github.com/user-attachments/assets/957d0e51-e1db-4b55-8c29-08e9d0943eb5" />
+
+
+cmd mai joh hotha hai uske configure chnages kiya ja skth ahiua ]lekin ebterypoint mnai chnages nhi kr skthe hai
+
+
+
+
 # ENTRYPOINT और CMD में अन्तर
 
 नीचे बहुत ही सरल भाषा और उदाहरणों के साथ समझाया गया है कि Dockerfile में ENTRYPOINT और CMD का रोल क्या होता है और दोनों में असल फर्क क्या है।
