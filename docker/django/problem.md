@@ -232,4 +232,41 @@ docker rmi $(docker images -aq)
 
 ⸻
 
-👉 Hannu, do you want me to also give you the commands to stop and remove containers first (so the image isn’t “in use” error comes)?
+Got it 👍 If you want to delete all Docker images together, you can run:
+
+⸻
+
+🧹 Delete all images
+
+docker rmi $(docker images -aq)
+
+
+⸻
+
+⚠️ If containers are using those images
+
+You need to stop and remove containers first, otherwise you’ll get image is being used by container errors.
+
+Run these two commands first:
+
+# Stop all running containers
+docker stop $(docker ps -aq)
+
+# Remove all containers
+docker rm $(docker ps -aq)
+
+Then delete all images:
+
+docker rmi $(docker images -aq)
+
+
+⸻
+
+🧨 One-liner (stop + remove containers + delete all images)
+
+docker stop $(docker ps -aq) && docker rm $(docker ps -aq) && docker rmi $(docker images -aq)
+
+
+⸻
+
+👉 Hannu, do you also want me to include the command for deleting all volumes and networks (a full Docker system cleanup), or you just want to keep it to images only?
