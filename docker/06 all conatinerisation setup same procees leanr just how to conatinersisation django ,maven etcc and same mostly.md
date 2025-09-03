@@ -179,16 +179,10 @@ CMD source venv1/bin/activate \
 
 ---
 
-## Next Steps (Day 26 Preview)
 
 - Deep dive into Docker CLI commands and networking.  
 - Implement multi-stage Docker builds to minimize image size.  
 - Explore distroless container images for production security.
 
 ---
-
-## Final Thought & Challenge Question
-
-Before concluding, here’s a bonus challenge:  
-**How many EC2 instances can you run on a free AWS account?**  
-Post your reasoning in the comments and help fellow learners understand AWS free tier limits.
+check docker to heron repo for  practical things .
