@@ -1,3 +1,8 @@
+
+<img width="1470" height="956" alt="Screenshot 2025-09-04 at 1 24 33 AM" src="https://github.com/user-attachments/assets/cac025d3-d612-45ee-8d92-b2837d801cd3" />
+
+
+
 Got it 👍 I can see your setup and the error. Let’s write a complete documentation of how you containerized and deployed your first Django app, including the steps, commands, files used, and where the problem occurred (the 404 error you’re seeing).
 
 ⸻
@@ -157,6 +162,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
+
+now im trying to solve this im dcletering complete repo and complete dokcer image and image  again trying to setup cause its devloper issues need to fix sonthing 
+
 Now http://<server-ip>:8000/ will also work.
 
 ⸻
@@ -168,4 +176,60 @@ Now http://<server-ip>:8000/ will also work.
 
 ⸻
 
-👉 Hannu, do you want me to now create a step-by-step polished “final version” (with Docker + Django + root path fixed) that you can copy-paste and directly deploy?
+Good question 👍
+Here’s how you can delete Docker images step by step:
+
+⸻
+
+1. List all images
+
+docker images
+
+or
+
+docker image ls
+
+You’ll see output like:
+
+REPOSITORY     TAG       IMAGE ID       CREATED        SIZE
+django-app     latest    a1b2c3d4e5f6   1 hour ago     450MB
+
+
+⸻ i will splve it by the deketing the project and images will try gqsian 
+
+2. Delete image by name (repo:tag)
+
+docker rmi django-app:latest
+
+
+⸻
+
+3. Delete image by ID
+
+docker rmi a1b2c3d4e5f6
+
+
+⸻
+
+4. Force delete (if container is still using it)
+
+docker rmi -f a1b2c3d4e5f6
+
+
+⸻
+
+5. Remove all dangling (unused) images
+
+docker image prune
+
+
+⸻
+
+6. Remove all images (⚠️ careful, deletes everything!)
+
+docker rmi $(docker images -aq)
+
+
+⸻
+
+👉 Hannu, do you want me to also give you the commands to stop and remove containers first (so the image isn’t “in use” error comes)?
