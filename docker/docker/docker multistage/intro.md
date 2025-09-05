@@ -1,8 +1,43 @@
+
+
+<img width="1470" height="956" alt="Screenshot 2025-09-06 at 12 13 33 AM" src="https://github.com/user-attachments/assets/ad43fa55-44a8-44ae-a569-24598153b301" />
+
+<img width="1470" height="956" alt="Screenshot 2025-09-06 at 12 14 52 AM" src="https://github.com/user-attachments/assets/1f5e9007-506e-4356-9dc2-f55b4a1a992b" />
+]
+
+
+
+<img width="1470" height="956" alt="Screenshot 2025-09-06 at 12 15 16 AM" src="https://github.com/user-attachments/assets/3142b68d-f0f4-4308-b32f-66a2521d3440" />
+
+
+
+ 
+
+<img width="1470" height="956" alt="Screenshot 2025-09-06 at 12 17 57 AM" src="https://github.com/user-attachments/assets/4b9a5816-658d-4708-8819-898f23c8149a" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 I get exactly what you’re saying — if you’ve already run `npm run build` (React) or `tsc`/`npm run build` (Express) **outside** Docker, you already have a ready‑to‑deploy folder (`build/` for React, maybe `dist/` for Express).  
 So why not just copy that into a container and skip the whole multi‑stage thing?  
 Let’s break down why multi‑stage builds still matter, and when you can skip them.
 
----
+---'
 
 ## 🧩 Two Different Scenarios
 
