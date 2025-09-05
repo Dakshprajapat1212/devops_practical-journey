@@ -1,3 +1,105 @@
+Ah, now I get what you're asking — you're wondering why **two Docker images** are created when you have a folder structure like this:
+
+```
+parent-folder/
+├── Dockerfile         # (multi-stage or single-stage)
+├── sub-folder/
+│   └── Dockerfile     # another Dockerfile
+```
+
+And when you build, you end up with **two images**. Let’s break it down clearly:
+
+---
+
+## 🧠 Why Two Images Are Created?
+
+### ✅ Reason 1: You’re Building Both Dockerfiles Separately
+
+If you run:
+```bash
+docker build -t myapp:latest .
+```
+from `parent-folder/`, it uses the Dockerfile in that folder.
+
+Then if you run:
+```bash
+docker build -t mysubapp:latest sub-folder/
+```
+it uses the Dockerfile inside `sub-folder/`.
+
+👉 So you're building **two separate images**, each from a different Dockerfile and context — hence, two images.
+
+---
+
+### ✅ Reason 2: Multi-Stage Build Internally Creates Intermediate Images
+
+If your Dockerfile uses **multi-stage build**, like:
+```dockerfile
+FROM ubuntu AS build
+...
+FROM scratch
+COPY --from=build /app /app
+```
+
+Then Docker internally creates:
+- One image for the `build` stage (e.g., Ubuntu + Go compiler)
+- One final image (`scratch` stage) with just the binary
+
+Even though you only tag the final image (`myapp:latest`), Docker caches the intermediate image too — which shows up as `<none>` in `docker images`.
+
+---
+
+## 🔍 How to Check What’s Happening
+
+Run:
+```bash
+docker images
+```
+
+You’ll see something like:
+```
+REPOSITORY   TAG       IMAGE ID       SIZE
+myapp        latest    abc123         2MB
+<none>       <none>    def456         600MB
+mysubapp     latest    ghi789         10MB
+```
+
+- `myapp:latest` → Final image from parent folder
+- `<none>` → Intermediate image from multi-stage build
+- `mysubapp:latest` → Image built from sub-folder
+
+---
+
+## 🧹 How to Clean Up Extra Images
+
+If you only want to keep the final images:
+```bash
+docker image prune -f
+```
+
+Or manually delete:
+```bash
+docker rmi <image_id>
+```
+
+---
+
+## ✅ Summary in Simple Terms
+
+| Situation | Why Image Is Created |
+|-----------|----------------------|
+| Dockerfile in parent folder | Builds one image |
+| Dockerfile in sub-folder | Builds another image |
+| Multi-stage build | Creates intermediate image (cached) |
+| Final image | Tagged and used for running |
+
+---
+
+If you want, I can help you restructure your folders or Dockerfiles so that only one image is built — or help you combine both builds into one unified setup. Just say the word.
+
+
+
+
 Multi Stage Docker Build
 The main purpose of choosing a golang based applciation to demostrate this example is golang is a statically-typed programming language that does not require a runtime in the traditional sense. Unlike dynamically-typed languages like Python, Ruby, and JavaScript, which rely on a runtime environment to execute their code, Go compiles directly to machine code, which can then be executed directly by the operating system.
 
