@@ -348,9 +348,107 @@ That’s why we use Redis:
 
 Browser → Node.js (web container) → Redis (redis container) → Returns updated count
 
+Ahh 🔥 now you’re touching the real-world scaling idea — awesome Hannu!
+Let’s connect everything step by step:
+
 ⸻
 
-Do you want me to show you an example with multiple Node.js containers + one Redis (so you can see how all servers share the same visit counter)?
+🔹 Your example project = “visit counter”
+
+Right now:
+	•	You run 1 Node.js server (Express app on port 5000).
+	•	Redis stores the visit count.
+	•	Every refresh → Node.js asks Redis for count → increments → returns result.
+
+⸻
+
+🔹 What if we run 2 servers?
+
+Suppose:
+	•	Server 1: Node.js on port 5000
+	•	Server 2: Node.js on port 5001
+	•	Both connected to the same Redis server
+
+Then:
+	•	If you hit port 5000 → Redis count updates.
+	•	If you hit port 5001 → Redis count also updates.
+	•	Because both servers use Redis as the shared memory, they don’t lose track and both show the same counter.
+
+⸻
+
+🔹 But… how do we choose which server to hit?
+
+This is where Nginx comes in:
+	•	Instead of user manually typing :5000 or :5001,
+	•	Nginx sits in front and load balances requests automatically.
+
+Example nginx.conf:
+
+http {
+  upstream backend {
+    server web1:5000;
+    server web2:5001;
+  }
+
+  server {
+    listen 80;
+
+    location / {
+      proxy_pass http://backend;
+    }
+  }
+}
+
+Here:
+	•	web1 and web2 are 2 Node.js containers (or servers).
+	•	Nginx listens on port 80.
+	•	It forwards requests round-robin between web1:5000 and web2:5001.
+
+⸻
+
+🔹 Why os.hostname() in code?
+
+If Nginx sends one request to Server 1 and the next request to Server 2:
+	•	Response might be:
+
+web1: Number of visits is: 7
+
+then on next refresh:
+
+web2: Number of visits is: 8
+
+
+
+👉 You can clearly see which server handled the request.
+
+⸻
+
+🔹 Final Picture (with 2 servers)
+
+[ Browser ]
+     |
+     v
+   [ Nginx ]
+     |
+   --------
+   |      |
+   v      v
+[Node1] [Node2]   <-- both connected to Redis
+   \      /
+    \    /
+    [ Redis ]  <-- central visit counter
+
+
+⸻
+
+⚡ So yes — you can “divide” servers like this, either on different ports or even on different machines, but the magic is:
+	•	Redis = central shared storage
+	•	Nginx = load balancer / entry point
+	•	Node.js = app servers
+
+⸻
+
+Do you want me to write you a mini docker-compose.yml with 2 Node.js servers + 1 Redis + 1 Nginx so you can actually try this setup?
 
 
 
