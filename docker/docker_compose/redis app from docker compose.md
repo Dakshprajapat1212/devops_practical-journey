@@ -282,6 +282,72 @@ That’s why we use Redis:
 
 Browser → Node.js (web container) → Redis (redis container) → Returns updated count
 
+Awesome question Hannu 🔥 You’re now thinking about the plumbing of how Redis actually connects and stores that visit count. Let me break it down clearly:
+
+⸻
+
+1. Where is the “visit” count stored?
+	•	In your code, we have:
+
+redisClient.set('numVisits', numVisits);
+
+👉 This saves a key–value pair into Redis:
+
+Key:   "numVisits"
+Value: 7   (or whatever the count is)
+
+So the visit count is stored inside the Redis server’s memory (RAM of the machine/container where Redis is running).
+
+⸻
+
+2. How does Node.js connect to that server?
+
+In your server.js:
+
+const redisClient = redis.createClient({
+  host: 'redis',
+  port: 6379
+});
+
+	•	host: 'redis' → This is the hostname of the Redis server.
+	•	In Docker Compose, redis is the service name → Docker’s internal DNS resolves it to the Redis container’s IP.
+	•	If you weren’t using Docker, you would put the machine’s IP or localhost.
+	•	port: 6379 → Default Redis port.
+
+So your Node.js app (web service) connects to the Redis server (redis service) over the Docker network.
+
+⸻
+
+3. Which machine is this Redis running on?
+	•	If you run Docker locally → Redis is running inside a container on your machine.
+	•	If you deploy to cloud → Redis could run inside a cloud VM or a managed Redis service (like AWS ElastiCache, Azure Cache for Redis, etc.).
+
+But in every case:
+👉 The “visit” is stored in the memory of the machine/container running Redis.
+
+⸻
+
+4. Why not store in Node.js memory?
+
+If you just did:
+
+let numVisits = 0;
+
+	•	Then each Node.js server would keep its own separate counter in memory.
+	•	If you scaled your app to 3 containers → each one would have a different counter.
+	•	If the app restarts → the counter resets to 0.
+
+That’s why we use Redis:
+✅ Central place for all servers to read/write visit count.
+✅ Shared across multiple servers/containers.
+✅ Optionally persistent.
+
+⸻
+
+⚡ Flow looks like this:
+
+Browser → Node.js (web container) → Redis (redis container) → Returns updated count
+
 ⸻
 
 Do you want me to show you an example with multiple Node.js containers + one Redis (so you can see how all servers share the same visit counter)?
