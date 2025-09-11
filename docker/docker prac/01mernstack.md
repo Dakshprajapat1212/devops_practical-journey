@@ -136,7 +136,93 @@ docker compose up -d
 - Use `.env` files for environment variables like `MONGO_URI`
 - Use container names (`mongodb`) for internal networking
 - Use public IP for frontend fetch calls (not `localhost`)
+Absolutely — you're asking how to use **Docker Compose** to deploy a **three-tier MERN stack application**, and I’ve got you covered with clear, structured notes based on the video you’re watching.
 
 ---
 
-Would you like me to generate a ready-to-use `docker-compose.yml` and folder structure for your project? I can tailor it to your exact setup.
+## 🧱 Three-Tier Architecture in MERN Stack
+
+A typical MERN stack app follows this structure:
+
+| Tier              | Technology Used     | Role                          |
+|------------------|---------------------|-------------------------------|
+| Presentation     | React.js            | Frontend/UI                   |
+| Business Logic   | Node.js + Express   | Backend/API                   |
+| Data             | MongoDB             | Database                      |
+
+---
+
+## 🐳 Docker Compose Setup for MERN Stack
+
+Docker Compose helps you run all three tiers as **separate containers** with shared networking and volume management.
+
+### 🧩 Step-by-Step Breakdown
+
+#### 1. **Create a Docker Network**
+```bash
+docker network create mern-net
+```
+This allows all containers to communicate internally.
+
+#### 2. **Write Dockerfiles**
+- **Frontend (React)**: Uses Node base image, installs dependencies, exposes port 5173.
+- **Backend (Express + Node)**: Similar setup, exposes port 5050.
+- **MongoDB**: Uses official MongoDB image, mounts volume for data persistence.
+
+#### 3. **Create `docker-compose.yml`**
+Here’s a simplified structure:
+
+```yaml
+version: '3.8'
+services:
+  frontend:
+    build: ./client
+    ports:
+      - "5173:5173"
+    networks:
+      - mern-net
+
+  backend:
+    build: ./backend
+    ports:
+      - "5050:5050"
+    depends_on:
+      - mongodb
+    networks:
+      - mern-net
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - mern-net
+
+volumes:
+  mongo-data:
+
+networks:
+  mern-net:
+    driver: bridge
+```
+
+#### 4. **Run Everything**
+```bash
+docker-compose up -d
+```
+This spins up all containers in the correct order with shared networking.
+
+---
+
+## 🧠 Key Concepts to Remember
+
+- `depends_on`: Ensures MongoDB starts before backend.
+- `volumes`: Persist MongoDB data across container restarts.
+- `networks`: Enables internal communication between services.
+- `build`: Points to Dockerfile location for frontend/backend.
+
+---
+
+If you want, I can help you write a custom `docker-compose.yml` for your own MERN project or explain how to scale this setup for production. Just say the word.
