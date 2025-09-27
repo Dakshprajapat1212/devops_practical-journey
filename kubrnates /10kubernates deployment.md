@@ -81,9 +81,13 @@ spec:
 - **Pod only** → Debugging, running a one-off job, testing configs.  
 - **Deployment** → Production apps, microservices, APIs, anything that needs scaling and resilience.  
 
----
 
 ✅ **Check for you (interview prep angle):**  
 If asked *“Why not just use Pods?”* → Answer:  
 > Pods are ephemeral and not self-healing. Deployments provide automation, scaling, rolling updates, and rollback, which are essential for production workloads.
 
+
+pod->deployment resources --> replica set(controllers)---> pods
+<img width="1470" height="956" alt="Screenshot 2025-09-27 at 5 40 17 PM" src="https://github.com/user-attachments/assets/7a24ae4e-558c-48e8-9427-56ca21050f51" />
+
+  deployment ->> rollout rs-->> no.of pods joh deployment yml mai define kiya h
