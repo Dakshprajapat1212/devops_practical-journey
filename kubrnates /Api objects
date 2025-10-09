@@ -1,0 +1,125 @@
+
+
+## 🧠 API Objects in Kubernetes — Matlab kya?
+
+Kubernetes mein **API objects** wo cheezein hain jo tu cluster mein create, update, delete karta hai.  
+Har object ek **YAML file** ke through define hota hai, aur `kubectl apply` se cluster mein jaata hai.
+
+Soch le:
+> “Kubernetes ke API objects = cluster ke building blocks.”
+
+---
+
+## 🔧 Common API Objects aur unka matlab
+
+| Object | Matlab kya hai? |
+|--------|------------------|
+| **Pod** | Sabse chhoti unit — ek ya zyada containers ko run karta hai |
+| **Service** | Pod ke upar ek stable IP aur DNS deta hai — taaki baaki services connect kar sake |
+| **Deployment** | Pod ka version control aur auto-restart handle karta hai |
+| **ReplicaSet** | Kitne pods chahiye — ye maintain karta hai |
+| **ConfigMap** | Non-secret config values store karta hai (jaise env vars) |
+| **Secret** | Sensitive data store karta hai (jaise passwords, tokens) |
+| **Ingress** | External traffic ko cluster ke andar route karta hai |
+| **Namespace** | Cluster ko logical parts mein divide karta hai |
+| **PersistentVolumeClaim (PVC)** | Storage ka demand karta hai — jaise “mujhe 1GB chahiye” |
+
+---
+
+## 📦 Example: Pod YAML
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+  - name: mycontainer
+    image: nginx
+```
+
+Yeh ek **Pod object** hai — jo `nginx` container ko run karega.
+
+---
+
+## 🧩 Object Structure
+
+Har API object mein hota hai:
+
+- `apiVersion`: Kubernetes API ka version
+- `kind`: Object ka type (Pod, Service, etc.)
+- `metadata`: Naam, labels, namespace
+- `spec`: Actual configuration (jaise container image, ports)
+
+---
+
+## 🔁 Tu inko kaise use karta hai?
+
+- YAML likh ke `kubectl apply -f file.yaml`
+- `kubectl get pod`, `kubectl describe service` se dekh sakta hai
+- `kubectl delete pod mypod` se hata sakta hai
+
+---
+
+## 📌 Summary ek line mein:
+
+> **API objects = Kubernetes ke rules ke hisaab se banaye gaye resources** — jinse tu cluster mein kaam karta hai.
+
+Bahut sahi sawaal Daksh — tu ab **Kubernetes ke andar ke engine** ko samajhne ki taraf badh raha hai. Chal, ekdum simple Hindi mein samjhaata hoon:
+
+---
+
+## 🧠 “API Objects” naam kyu diya gaya?
+
+Kubernetes ka **core control system** ek **REST API** hai — matlab tu har resource (Pod, Service, Deployment, etc.) ko **HTTP request** ke through manage karta hai.
+
+Soch le:
+> “Kubernetes ke sab resources — Pod, Service, Deployment — sab API ke through create, update, delete hote hain. Isliye unhe **API objects** bola jaata hai.”
+
+---
+
+## 🔧 Real-Life Analogy
+
+Tu ek **online food app** use karta hai. Jab tu order karta hai:
+- App backend pe ek **API call** jaata hai: `POST /order`
+- Server ek **order object** create karta hai
+- Tu `GET /order/123` se apna order dekh sakta hai
+
+Kubernetes mein bhi wahi hota hai:
+- `POST /api/v1/pods` → ek Pod create hota hai
+- `GET /api/v1/pods/mypod` → tu Pod ka status dekh sakta hai
+
+---
+
+## 📦 Isliye “Object” kyu?
+
+Kyunki har resource ek **concrete entity** hoti hai — jiska naam, spec, status hota hai.  
+Jaise:
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+```
+
+Ye ek **Pod object** hai — jo API ke through banaya gaya hai.
+
+---
+
+## 🔁 Summary ek line mein:
+
+> **API object = Kubernetes ka resource jo REST API ke through manage hota hai.**
+
+Har object ka ek **endpoint** hota hai, ek **YAML structure**, aur ek **lifecycle** — create, update, delete.
+
+---
+
+Tu bole toh main ek diagram bana ke dikha sakta hoon — “kubectl → API server → object creation” ka flow.  
+Ya tu chahe toh ek mock API call trace kara deta hoon — jaise `kubectl apply` ke peeche kya hota hai.
+
+Bata, aage kaise badhein?
